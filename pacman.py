@@ -79,31 +79,31 @@ class GameState:
         return tmp
     getAndResetExplored = staticmethod(getAndResetExplored)
 
-    def getLegalActions( self, agentIndex=0 ):
+    def getLegalActions( self, agentIndex=0 ): #agentIndex primeste valoarea 0 by default
         """
         Returns the legal actions for the agent specified.
         """
 #        GameState.explored.add(self)
-        if self.isWin() or self.isLose(): return []
+        if self.isWin() or self.isLose(): return [] #ends the execution of a function, and returns control to the calling function
 
         if agentIndex == 0:  # Pacman is moving
-            return PacmanRules.getLegalActions( self )
+            return PacmanRules.getLegalActions( self ) #returneaza legal actions pentru pacman
         else:
-            return GhostRules.getLegalActions( self, agentIndex )
+            return GhostRules.getLegalActions( self, agentIndex ) #returneaza legal actions pentru fantome
 
     def generateChild( self, agentIndex, action):
         """
         Returns the child state after the specified agent takes the action.
         """
         # Check that children exist
-        if self.isWin() or self.isLose(): raise Exception('Can\'t generate a child of a terminal state.')
+        if self.isWin() or self.isLose(): raise Exception('Can\'t generate a child of a terminal state.') #win si lose sunt stari terminale
 
         # Copy current state
         state = GameState(self)
 
         # Let agent's logic deal with its action's effects on the board
         if agentIndex == 0:  # Pacman is moving
-            state.data._eaten = [False for i in range(state.getNumAgents())]
+            state.data._eaten = [False for i in range(state.getNumAgents())] #idk
             PacmanRules.applyAction( state, action )
         else:                # A ghost is moving
             GhostRules.applyAction( state, action, agentIndex )
@@ -112,10 +112,10 @@ class GameState:
         if agentIndex == 0:
             state.data.scoreChange += -TIME_PENALTY # Penalty for waiting around
         else:
-            GhostRules.decrementTimer( state.data.agentStates[agentIndex] )
+            GhostRules.decrementTimer( state.data.agentStates[agentIndex] ) #scade timpul pentru o anumita fantoma
 
         # Resolve multi-agent effects
-        GhostRules.checkDeath( state, agentIndex )
+        GhostRules.checkDeath( state, agentIndex ) #verifica daca o fantoma este moarta
 
         # Book keeping
         state.data._agentMoved = agentIndex
@@ -162,7 +162,7 @@ class GameState:
         return [s.getPosition() for s in self.getGhostStates()]
 
     def getNumAgents( self ):
-        return len( self.data.agentStates )
+        return len( self.data.agentStates ) #It will return an integer representing the length of the sequence or collection stored in self.data.agentStates.
 
     def getScore( self ):
         return float(self.data.score)
