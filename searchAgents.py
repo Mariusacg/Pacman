@@ -235,8 +235,8 @@ class PositionSearchProblem(search.SearchProblem):
         Returns the cost of a particular sequence of actions. If those actions
         include an illegal move, return 999999.
         """
-        if actions == None: return 999999
-        x,y= self.getStartState()
+        if actions == None: return 999999 #daca nu exista actiunea => 9999..
+        x,y= self.getStartState()#coord init
         cost = 0
         for action in actions:
             # Check figure out the next state and see whether its' legal
@@ -271,7 +271,9 @@ class StayWestSearchAgent(SearchAgent):
         self.searchType = lambda state: PositionSearchProblem(state, costFn)
 
 def manhattanHeuristic(position, problem, info={}):
-    "The Manhattan distance heuristic for a PositionSearchProblem"
+    "The Manhattan distance heuristic for a PositionSearchProblem"  
+    # the "Manhattan distance" between the two points,
+    # which is the shortest path a person could take in a grid-like layout (moving only horizontally and vertically, no diagonal movement).
     xy1 = position
     xy2 = problem.goal
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
