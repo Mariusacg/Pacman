@@ -100,26 +100,59 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 
-def depthFirstSearch(problem):
-    """
-    Search the deepest nodes in the search tree first.
+def depthFirstSearch(problem : SearchProblem):
+    
+    #Check if the goal is also the start state
+ 
+    if problem.isGoalState(problem.getStartState()) :
+        return []
+    
+    stack = util.Stack()
+    visited = []
+    path = []
+    stack.push((problem.getStartState() , []) )
+    while not stack.isEmpty() :
+        current_state , path = stack.pop()
 
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
+        if problem.isGoalState(current_state) :
+            return path
+        
+        if current_state not in visited :
+            visited.append(current_state)
+            adiacente = problem.expand(current_state)
+            if adiacente :
+                for coord , directie , _ in adiacente :
+                    new_path = path + [directie]
+                    stack.push((coord , new_path))
 
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
+    return []
+        
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    #Check if the goal is also the start state
+ 
+    if problem.isGoalState(problem.getStartState()) :
+        return []
+    
+    queue = util.Queue()
+    visited = []
+    path = []
+    queue.push((problem.getStartState() , []) )
+    while not queue.isEmpty() :
+        current_state , path = queue.pop()
+
+        if problem.isGoalState(current_state) :
+            return path
+        
+        if current_state not in visited :
+            visited.append(current_state)
+            adiacente = problem.expand(current_state)
+            if adiacente :
+                for coord , directie , _ in adiacente :
+                    new_path = path + [directie]
+                    queue.push((coord , new_path))
+                    
+    return []
 
 def nullHeuristic(state, problem=None):
     """
@@ -129,10 +162,30 @@ def nullHeuristic(state, problem=None):
     return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
 
+    if problem.isGoalState(problem.getStartState()) :
+        return []
+    
+    queue = util.PriorityQueue()
+    visited = []
+    path = []
+    queue.push((problem.getStartState() , []), 0)
+    while not queue.isEmpty() :
+        current_state , path = queue.pop()
+
+        if problem.isGoalState(current_state) :
+            return path
+        
+        if current_state not in visited :
+            visited.append(current_state)
+            adiacente = problem.expand(current_state)
+            if adiacente :
+                for coord , directie , _ in adiacente :
+                    new_path = path + [directie]
+                    gamma = problem.getCostOfActionSequence(path) + heuristic(current_state, problem)
+                    queue.push((coord , new_path) , gamma)
+                    
+    return []
 
 # Abbreviations
 bfs = breadthFirstSearch
